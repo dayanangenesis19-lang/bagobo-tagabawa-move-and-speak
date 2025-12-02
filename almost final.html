@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bagobo Tagabawa Cultural Hub</title>
+<style>
+:root{
+  --accent:#6e2f1a;
+  --accent-dark:#542413;
+  --muted:#f4f4f4;
+  --card:#fff;
+  --text:#222;
+  --placeholder-border:#d0c6c0;
+  --placeholder-gradient: linear-gradient(135deg,#f5e0d6,#fff6f3);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background:var(--muted);
+  color:var(--text);
+}
+header{
+  background:var(--accent);
+  color:white;
+  padding:20px;
+  text-align:center;
+  font-size:28px;
+  font-weight:700;
+}
+nav{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  background:var(--accent-dark);
+  padding:10px;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+  padding:6px 10px;
+}
+nav a:hover{text-decoration:underline}
+
+.page{display:none; padding:28px; min-height:calc(100vh - 140px);}
+.visible{display:block;}
+
+.login-box{
+  width:360px;
+  max-width:92%;
+  margin:48px auto;
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  text-align:center;
+}
+.login-box input{
+  width:100%;
+  padding:10px 12px;
+  margin:10px 0;
+  border:1px solid #ddd;
+  border-radius:6px;
+  font-size:15px;
+}
+.btn{
+  display:inline-block;
+  padding:10px 16px;
+  background:var(--accent);
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+  cursor:pointer;
+  border:none;
+  font-weight:600;
+}
+.btn:hover{background:var(--accent-dark)}
+
+.grid{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+.card{
+  width:250px;
+  background:var(--card);
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.06);
+  overflow:hidden;
+  text-align:center;
+  cursor:pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover{
+  transform: scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+.card .placeholder{
+  height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:1px solid var(--placeholder-border);
+  background:var(--placeholder-gradient);
+  color:var(--accent);
+  font-weight:700;
+  font-size:18px;
+  text-align:center;
+  padding:10px;
+}
+.card p{padding:18px 12px; font-size:18px; margin:0; font-weight:700}
+
+.content{max-width:900px; margin:0 auto;}
+h2{color:var(--accent); margin-bottom:8px}
+h3{margin-top:18px;color:var(--accent-dark)}
+.section-card{
+  background:var(--card);
+  padding:18px;
+  border-radius:10px;
+  margin:12px 0;
+  box-shadow:0 6px 16px rgba(0,0,0,0.04);
+}
+
+.small-placeholder{
+  width:100%;
+  height:160px;
+  border-radius:8px;
+  border:2px dashed var(--placeholder-border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--accent-dark);
+  font-weight:700;
+  margin-bottom:12px;
+  background:var(--placeholder-gradient);
+  font-size:16px;
+  text-align:center;
+  padding:8px;
+}
+
+.did-you-know{
+  background:#fff3e0;
+  border-left:5px solid var(--accent);
+  padding:12px;
+  margin:12px 0;
+  font-style:italic;
+  box-shadow:0 4px 8px rgba(0,0,0,0.05);
+}
+
+.tooltip { position: relative; cursor: pointer; }
+.tooltip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  top:-30px; left:50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color:white; padding:5px 8px; border-radius:4px;
+  font-size:12px; white-space: nowrap;
+  z-index:100;
+}
+
+table.vocab{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+  font-size:15px;
+}
+table.vocab th, table.vocab td{
+  border:1px solid #e6e2de;
+  padding:8px 10px;
+  text-align:left;
+  background: #fff;
+}
+.back{margin-top:18px; display:inline-block}
+
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.quiz-options button{border-radius:8px;border:1px solid #dcd6d0;padding:10px 12px;background:white;cursor:pointer}
+.quiz-options button:hover{background:#fafafa}
+.score{font-weight:700;color:var(--accent);margin-top:12px}
+
+#progress-tracker{
+  position:fixed;
+  bottom:12px;
+  right:12px;
+  background:#fff3e0;
+  padding:8px 12px;
+  border-radius:6px;
+  font-weight:600;
+  box-shadow:0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media (max-width:720px){
+  .grid{gap:12px}
+  .card{width:46%}
+  .card p{font-size:16px}
+}
+@media (max-width:420px){
+  .card{width:100%}
+}
+</style>
+</head>
+<body>
+
+<header>Bagobo Tagabawa Cultural Hub</header>
+<nav aria-label="main navigation">
+  <a href="#" onclick="goHome()">Home</a>
+  <a href="#dialect" onclick="openCategory('translation')">Word Translation</a>
+  <a href="#activities" onclick="openCategory('activities')">Physical Activities</a>
+  <a href="#quiz" onclick="openCategory('quiz')">Quiz</a>
+</nav>
+
+<div id="progress-tracker">Sections visited: 0 / 3</div>
+
+<!-- LOGIN PAGE -->
+<div id="page-login" class="page visible" aria-live="polite">
+  <div class="login-box" role="form" aria-label="login form">
+    <h2>Sign in to continue</h2>
+    <input id="email" type="text" placeholder="Email (any text accepted)">
+    <input id="password" type="password" placeholder="Password (any text accepted)">
+    <button class="btn" onclick="login()">Sign in</button>
+    <p style="margin-top:12px;color:#666;font-size:14px">You can enter anything to sign in (demo mode).</p>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page">
+  <div class="content">
+    <h2>Let's learn Bagobo Tagabawa's Culture, Language and Physical Activities</h2>
+    <p>Choose a category to explore Bagobo Tagabawa culture and language.</p>
+    <div class="grid" role="list">
+      <div class="card" role="listitem" onclick="openCategory('history')">
+        <div class="placeholder">History Section</div>
+        <p>Bagobo Tagabawa History</p>
+      </div>
+      <div class="card" role="listitem" onclick="openCategory('activities')">
+        <div class="placeholder">Physical Activities</div>
+        <p>Physical Activities</p>
+      </div>
+      <div class="card" role="listitem" onclick="openCategory('translation')">
+        <div class="placeholder">Word Translation</div>
+        <p>Word Translation</p>
+      </div>
+      <div class="card" role="listitem" onclick="openCategory('quiz')">
+        <div class="placeholder">Quiz Section</div>
+        <p>Quiz</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY PAGE -->
+<div id="page-history" class="page">
+  <div class="content">
+    <a class="btn back" onclick="goHome()">⬅ Back to Home</a>
+    <h2>History</h2>
+    <p class="section-card">
+      The Bagobo Tagabawa are an indigenous people in Mindanao with a rich culture and history. To learn more about the significant event that happened in their culture, we have provided a 
+comprehensive  yet detailed order of the important events that shaped what Bagobo Tagabawa is today.
+    </p>
+    <div class="did-you-know">Did you know? The Bagobo Tagabawa practice intricate weaving and ritual dances that reflect their ancestry.</div>
+    <div class="section-card">
+      <h3>Subcategories</h3>
+      <button class="btn" onclick="openSubpage('history-before')">Before Colonization</button>
+      <button class="btn" style="margin-left:12px" onclick="openSubpage('history-after')">After Colonization</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY BEFORE -->
+<div id="page-history-before" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('history')">⬅ Back to History</a>
+    <h2>Before Colonization</h2>
+    <div class="small-placeholder">Communal living, animistic rituals, and traditional weaving.</div>
+    <p>Traditionally, the Bagobo Tagabawa lived in close relationship with their natural environment, following animistic rituals, communal farming, hunting, weaving, and a rich oral tradition.The origin of the term “Bagobo” is uncertain, but it may have come from bago, meaning “new or recent,” and obo or uvu, meaning “person.” The name originally applied to the coastal peoples of Davao Gulf, especially the indigenous groups on the western shores of southeastern Davao. However, these groups consisted of three different linguistic groups whose languages were mutually unintelligible before acculturation and intermarriage: the Tagabawa, the Ubo Manuvu, and the Jangan. A fourth group, the Matigsalug, is linguistically most closely related to the Ubo, but this may be the result of intermarriage and close interaction with the neighboring Ubo of Baguio District, Davao City.</p>
+
+<p>“Tagabawa” means “people of the south,” from bawa, which may actually mean either “south” or “north.” The Ubo Manuvu call themselves Manuvu, meaning “people.” However, so as not to be confused with the Manobo groups that are scattered in various places in Mindanao, the Manuvu are more known as Obo Manobo and Obo Bagobo. “Jangan” means “forest,” and the Jangan are called by various names by neighboring groups. The Matigsalug call them Klata, meaning “to go through,” because the Matigsalug have to go through Jangan territory to go to Davao to barter. The Tagabawa and Ubo call them Eto or Attaw, a variant of tao, utaw, or tawo, which all mean “people.” “Jangan” is spelled “Guiangan” in the Spanish records because of the peculiarities of Spanish orthography. The older-generation Jangan call themselves thus, but the present generation prefer to be called Klata and refer to jangan as the forest that is their traditional habitat. Spanish missionaries and early ethnographers tended to identify them all as one group because they had common articles of material culture such as  dress and ornaments, tools, blades, and musical instruments.Best clothing retailers</p>
+
+<p>Well into the 19th century, the Bagobo were a self-sufficient and autonomous people, although they had trading relationships with outsiders and they were nominally under the rule of the Maguindanao sultanate. However, in 1838, Datu Ongay, a Maguindanaon, roused the ire of the Spanish colonial government when he attacked a Spanish ship. In 1845, the Maguindanaon sultan entered into a treaty with Spain in which he gave the latter control over the region stretching between Davao Gulf and Sarangani Bay, which was Bagobo land. Governor-General Narciso Claveria appointed Jose Oyanguren as governor of Davao region. Oyanguren had yet to rid the region of its resident Muslims, who were putting up a resistance under the leadership of the Maguindanaon Dato Bago. But by April 1848, Oyanguren had begun colonizing Davao.</p>
+
+<p> Sibulan is the ancient settlement of the Bagobo and was the center of all Bagobo settlements when the Spaniards came. Datu Manib was the datu of Sibulan who traced his genealogy 11 generations back to Saling-olop, a legendary culture hero. Thus, he was the foremost datu among all the other datus. He was between 45 and 50 years old when the Spaniards first came to Sibulan. Although he cordially received the Spaniards when they arrived, he was later imprisoned for defying the Spanish injunction against human sacrifices and refusing to help them capture a Bagobo fugitive.</p>
+
+<p> Spanish colonization and Christianization founded some reducciones (colonized towns) such as Lobo (now Santa Cruz), Astorga, Daliao, Bago, Talomo, Daron, Binugao, Tuban, Cauit, and Bacolod. Permanent crop fields were mandated so that village life would become sedentary, even as abonados (merchants who were Christian Filipinos) penetrated the interior in search of goods to trade, thus facilitating colonial access. Generally, however, Spanish colonial efforts were restricted to the lowlands and coastal areas. It was not till the 1890s that the Bagobo came into contact with Europeans who moved in to establish abaca and coconut plantations. Even so, native adaptation proved difficult and resulted in the gradual disappearance of the Bagobo from Santa Cruz.</p>
+
+
+
+  </div>
+</div>
+
+<!-- HISTORY AFTER -->
+<div id="page-history-after" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('history')">⬅ Back to History</a>
+    <h2>After Colonization</h2>
+    <div class="small-placeholder">Adaptation with external influences while preserving traditions.</div>
+    <p>After contact and colonization, many Bagobo Tagabawa communities adapted external influences while maintaining ritual practices, weaving traditions, and their dialect.</p>
+
+<p>After colonization, the Bagobo people faced significant changes in their way of life. Spanish and later American influences introduced new governance, religion, and education systems. Many Bagobo communities were converted to Christianity, which affected their traditional beliefs and rituals. Their lands were often encroached upon for agricultural and commercial purposes. Traditional leadership structures were disrupted, with local chiefs losing authority. Economic practices shifted as they were encouraged to participate in cash-crop farming. Despite these changes, the Bagobo preserved aspects of their culture, including weaving, dances, and oral traditions. Interaction with outsiders led to a blending of cultures, seen in clothing and language. Colonization also brought health challenges and new diseases that affected population numbers. Overall, while the Bagobo adapted to colonial influence, they strived to maintain their cultural identity.</p>
+  </div>
+</div>
+
+<!-- PHYSICAL ACTIVITIES PAGE -->
+<div id="page-activities" class="page">
+  <div class="content">
+    <a class="btn back" onclick="goHome()">⬅ Back to Home</a>
+    <h2>Traditional Physical Activities</h2>
+    <div class="small-placeholder">Dance, Bamboo games, Hunting-simulation, and Ritual dances.</div>
+    <div class="did-you-know">Did you know? Some traditional dances mimic the movement of animals to train hunting skills.</div>
+    <div class="section-card">
+      <h3>PHYSICAL ACTIVITIES</h3>
+
+<h1>TRADITIONAL DANCE</h1>
+
+<li><b>Kulintang Dance</b>- performed with the kulintang (a set of gongs), showing the rhythm of life and community cooperation.</li>
+<li><b>Singkil-inspired dances,</b>- se intricate footwork to imitate movements of animals or spirits..</li>
+<li><b>Maranao-influenced dances</b>- appear, reflecting intertribal cultural exchange. Dances are accompanied by colorful traditional attire, beadwork, and sometimes masks, emphasizing beauty and symbolism</li>
+<li><b>Mangalay-inspired Dance</b>- Shows graceful movements of women, often during weddings or festive events.</li>
+
+      <ul>
+
+<h1>TRADITIONAL SPORTS</h1>
+
+</ul>
+        <li class="tooltip" data-tip="Coordinate your steps and rhythm"><b>Traditional dance movements</b></li>
+        <li><b>Bamboo games / agility challenges</b></li>
+        <li><b>Hunting-simulation games (precision and tracking)</b></li>
+        <li><b>Harvest-carrying (strength and teamwork)</b></li>
+        <li><b>Community ritual dances (endurance and coordination)</b></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSLATION PAGE -->
+<div id="page-translation" class="page">
+  <div class="content">
+    <a class="btn back" onclick="goHome()">⬅ Back to Home</a>
+    <h2>Word Translation (Bagobo Tagabawa)</h2>
+    <div class="section-card">
+      <h3>Subcategories</h3>
+      <button class="btn" onclick="openSubpage('trans-greetings')">Greetings</button>
+      <button class="btn" onclick="openSubpage('trans-family')" style="margin-left:8px">Family</button>
+      <button class="btn" onclick="openSubpage('trans-food')" style="margin-left:8px">Food</button>
+      <button class="btn" onclick="openSubpage('trans-exercises')" style="margin-left:8px">Exercises</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSLATION GREETINGS -->
+<div id="page-trans-greetings" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('translation')">⬅ Back to Word Translation</a>
+    <h2>Greetings</h2>
+    <div class="small-placeholder">Common greetings in Bagobo Tagabawa language.</div>
+    <div class="section-card">
+      <table class="vocab" aria-label="greetings table">
+        <thead><tr><th>Bagobo Tagabawa</th><th>English</th></tr></thead>
+        <tbody>
+          <tr><td>Madiggir sil-lm kaneko</td><td>Good morning / Good day</td></tr>
+          <tr><td>Madiggir mappon kaneko</td><td>Good afternoon</td></tr>
+          <tr><td>Madiggir dukil-lm kaneko</td><td>Good evening / Good night</td></tr>
+          <tr><td>Andin ngadan no?</td><td>What is your name?</td></tr>
+          <tr><td>Manda ka?</td><td>Where are you going?</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSLATION FAMILY -->
+<div id="page-trans-family" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('translation')">⬅ Back to Word Translation</a>
+    <h2>Family</h2>
+    <div class="small-placeholder">Family words and terms.</div>
+    <div class="section-card">
+      <table class="vocab">
+        <thead><tr><th>Bagobo Tagabawa</th><th>English</th></tr></thead>
+        <tbody>
+          <tr><td>Innà</td><td>Mother</td></tr>
+          <tr><td>Ammà</td><td>Father</td></tr>
+          <tr><td>Batà</td><td>Child</td></tr>
+          <tr><td>Bale</td><td>House / Home</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSLATION FOOD -->
+<div id="page-trans-food" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('translation')">⬅ Back to Word Translation</a>
+    <h2>Food</h2>
+    <div class="small-placeholder">Food items in Bagobo Tagabawa culture.</div>
+    <div class="section-card">
+      <table class="vocab">
+        <thead><tr><th>Bagobo Tagabawa</th><th>English</th></tr></thead>
+        <tbody>
+          <tr><td>Bag-gas</td><td>Rice / harvest (context term)</td></tr>
+          <tr><td>Omeng</td><td>Eat / to eat</td></tr>
+          <tr><td>Wayig</td><td>Water</td></tr>
+          <tr><td>Innà mudan ngan-ni</td><td>It looks like it will rain</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSLATION EXERCISES -->
+<div id="page-trans-exercises" class="page">
+  <div class="content">
+    <a class="btn back" onclick="openCategory('translation')">⬅ Back to Word Translation</a>
+    <h2>Exercises / Physical Actions</h2>
+    <div class="small-placeholder">Walk, Run, Sit, Stand, Bend down.</div>
+    <div class="section-card">
+      <table class="vocab">
+        <thead><tr><th>Bagobo Tagabawa</th><th>English</th></tr></thead>
+        <tbody>
+          <tr><td>Lakaw</td><td>Walk</td></tr>
+          <tr><td>Dagan</td><td>Run</td></tr>
+          <tr><td>Lingkud</td><td>Sit</td></tr>
+          <tr><td>Barog</td><td>Stand</td></tr>
+          <tr><td>Lubong</td><td>Bend down</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ PAGE -->
+<div id="page-quiz" class="page">
+  <div class="content">
+    <a class="btn back" onclick="goHome()">⬅ Back to Home</a>
+    <h2>Quiz: Test your knowledge</h2>
+    <div class="section-card" id="quiz-card">
+      <p id="quiz-question" style="font-weight:700">Question will appear here</p>
+      <div id="quiz-options" class="quiz-options"></div>
+      <div class="score" id="quiz-score" aria-live="polite"></div>
+      <div style="margin-top:12px">
+        <button class="btn" onclick="startQuiz()">Start / Restart Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const pages = {
+  login: document.getElementById('page-login'),
+  home: document.getElementById('page-home'),
+  history: document.getElementById('page-history'),
+  activities: document.getElementById('page-activities'),
+  translation: document.getElementById('page-translation'),
+  quiz: document.getElementById('page-quiz'),
+  'history-before': document.getElementById('page-history-before'),
+  'history-after': document.getElementById('page-history-after'),
+  'trans-greetings': document.getElementById('page-trans-greetings'),
+  'trans-family': document.getElementById('page-trans-family'),
+  'trans-food': document.getElementById('page-trans-food'),
+  'trans-exercises': document.getElementById('page-trans-exercises')
+};
+
+let visited = new Set();
+function hideAll(){ Object.values(pages).forEach(p=>p.classList.remove('visible')); }
+function show(pageEl){ hideAll(); pageEl.classList.add('visible'); window.scrollTo({top:0,behavior:'instant'}); }
+function login(){ show(pages.home); markVisited('home'); }
+function goHome(){ show(pages.home); markVisited('home'); }
+function openCategory(cat){ show(pages[cat]); markVisited(cat); }
+function openSubpage(sub){ show(pages[sub]); markVisited(sub); }
+
+function markVisited(section){
+  visited.add(section);
+  document.getElementById('progress-tracker').textContent =
+    `Sections visited: ${visited.size} / 3`;
+}
+
+// --- QUIZ LOGIC ---
+const quizData = [
+  { q:"What is the Bagobo Tagabawa's indigenous language?", options:["Bagobo Tagabawa","Cebuano","Tagalog","English"], answer:0 },
+  { q:"Which activity mimics animal movement?", options:["Traditional dance","Basketball","Soccer","Chess"], answer:0 },
+  { q:"What is 'Innà'?", options:["Mother","Father","Child","House"], answer:0 }
+];
+
+function startQuiz(){
+  let current = 0;
+  let score = 0;
+  const questionEl = document.getElementById('quiz-question');
+  const optionsEl = document.getElementById('quiz-options');
+  const scoreEl = document.getElementById('quiz-score');
+  
+  function showQuestion(){
+    if(current >= quizData.length){
+      questionEl.textContent = "Quiz completed!";
+      optionsEl.innerHTML = "";
+      scoreEl.textContent = "Your score: "+score+"/"+quizData.length;
+      return;
+    }
+    let q = quizData[current];
+    questionEl.textContent = q.q;
+    optionsEl.innerHTML = "";
+    q.options.forEach((opt,i)=>{
+      let btn = document.createElement('button');
+      btn.textContent = opt;
+      btn.onclick = ()=>{
+        if(i===q.answer){ score++; alert("Correct! 🎉"); } else { alert("Oops! Try next one."); }
+        current++;
+        showQuestion();
+      };
+      optionsEl.appendChild(btn);
+    });
+  }
+  showQuestion();
+}
+</script>
+</body>
+</html>
